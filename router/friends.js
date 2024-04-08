@@ -2,6 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
+
 let friends = {
     "johnsmith@gamil.com": {"firstName": "John","lastName": "Doe","DOB":"22-12-1990"},
     "annasmith@gamil.com":{"firstName": "Anna","lastName": "smith","DOB":"02-07-1983"},
@@ -11,23 +12,36 @@ let friends = {
 
 // GET request: Retrieve all friends
 router.get("/",(req,res)=>{
-
-  // Update the code here
-
-  res.send("Yet to be implemented")//This line is to be replaced with actual return value
+  // const friendsList = Object.keys(friends).map((email) => {
+  //   return {
+  //     email: email, // Include the email address
+  //     ... friends[email],  // Spread operator to include all properties of the friend object
+  //   };
+  // });
+  // return res.send(friendsList)
+  res.send(JSON.stringify(friends,null,4)); // It will return the object as it is in pretty form with 4 spaces
 });
 
 // GET by specific ID request: Retrieve a single friend with email ID
 router.get("/:email",(req,res)=>{
-  // Update the code here
-  res.send("Yet to be implemented")//This line is to be replaced with actual return value
+  const email = req.params.email;
+  res.send(friends[email]);
 });
 
 
 // POST request: Add a new friend
-router.post("/",(req,res)=>{
-  // Update the code here
-  res.send("Yet to be implemented")//This line is to be replaced with actual return value
+router.post("/", (req, res) => {
+  console.log(req.body); // Add logging to see the incoming request body
+  if (req.body.email) {
+    friends[req.body.email] = {
+      "firstName": req.body.firstName,
+      "lastName": req.body.lastName,
+      "DOB": req.body.DOB
+    };
+    res.send("The user " + req.body.firstName + " " + req.body.lastName + " has been added successfully");
+  } else {
+    res.status(400).send("Email is required.");
+  }
 });
 
 
