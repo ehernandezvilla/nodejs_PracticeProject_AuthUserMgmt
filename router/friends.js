@@ -47,8 +47,37 @@ router.post("/", (req, res) => {
 
 // PUT request: Update the details of a friend with email id
 router.put("/:email", (req, res) => {
-  // Update the code here
-  res.send("Yet to be implemented")//This line is to be replaced with actual return value
+  const email = req.params.email;
+  let friend = friends[email];
+
+  if (friend) {
+    const {DOB, firstName, lastName} = req.body;
+  
+  if (DOB) {
+    friend["DOB"] = DOB;
+  }
+
+  if (firstName) {
+    friend["firstName"] = firstName;
+  }
+
+  if (lastName) {
+    friend["lastName"] = lastName;
+  }
+
+  friends[email] = friend;
+  // Sending a JSON response for consistency
+  res.status(200).json({
+    message: "Friend details updated successfully",
+    friend: friend
+  });
+
+} else {
+  //Friend not found, setting status to 404
+  res.status(404).json({
+    message: "Friend not found"
+  })
+}
 });
 
 
